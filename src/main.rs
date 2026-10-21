@@ -12,6 +12,8 @@ use clap::{Parser, builder::Str};
 use clap_derive::Subcommand;
 use directories::ProjectDirs;
 
+use crate::server::enroll;
+
 fn project_dirs() -> ProjectDirs {
     directories::ProjectDirs::from("", "ThePangel", "Gutun").expect("could not find home dir")
 }
@@ -27,6 +29,10 @@ fn server_ip() -> String {
 enum Command {
     Pair {
         code: String,
+    },
+    Enroll {
+        #[arg(long, default_value = "0.0.0.0:8080")]
+        listen: String,
     },
 
     Server {
@@ -61,7 +67,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Server { listen, data } => {
             server::start_server(listen).await?;
         }
-
+        Command::Enroll { listen } => server::enroll(listen).await?,
         Command::Pair { code } => client::pair(code).await?,
     }
 
