@@ -2,17 +2,11 @@ mod client;
 mod crypto;
 mod server;
 
-use std::{
-    array,
-    path::{Path, PathBuf},
-    sync::LazyLock,
-};
+use std::path::PathBuf;
 
-use clap::{Parser, builder::Str};
+use clap::Parser;
 use clap_derive::Subcommand;
 use directories::ProjectDirs;
-
-use crate::server::enroll;
 
 fn project_dirs() -> ProjectDirs {
     directories::ProjectDirs::from("", "ThePangel", "Gutun").expect("could not find home dir")
